@@ -18,6 +18,7 @@ public class RestClient {
     private static final Logger LOGGER = Logger.getLogger(RestClient.class.getName());
 
     private static final String weather_url = "http://t.weather.sojson.com/api/weather/city/";
+    private static final String weather_url2 = "http://wthrcdn.etouch.cn/weather_mini?city=";
 
     private final Client httpClient;
 
@@ -32,10 +33,16 @@ public class RestClient {
     }
 
     public InputStream getStream(String id) {
-
+        LOGGER.info("getStream " +id );
         return   httpClient.target(weather_url+id).request(
                 ).get(InputStream.class);
     }
+    public InputStream getStreamByName(String name) {
+        LOGGER.info("getStreamByName " +name );
+        return   httpClient.target(weather_url2+name).request(
+        ).get(InputStream.class);
+    }
+
 
     public Response getById(String id) {
 

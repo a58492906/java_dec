@@ -36,6 +36,7 @@ public class ReactiveGreetingResource {
         return service.getOne();
     }
 
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getByName/{name}")
@@ -52,4 +53,13 @@ public class ReactiveGreetingResource {
         return service.getByCode(code);
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/testByTimes")
+    @Operation(summary = "城市代码天气预报", description = "这是一个根据城市code获取天气预报的接口")
+    public Uni<String> testCache() {
+        return service.testCache();
+    }
+
 }
+
