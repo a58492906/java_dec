@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: zuul-service
+  redis:
+    database: 0
+    port: 6379
+    password:
+    timeout: 3000
+    host: 127.0.0.1
+    #    cluster:
+    #      nodes: 192.168.234.18:6579,192.168.234.28:6579,192.168.234.29:6579,192.168.234.30:6579,192.168.234.6:6579,192.168.234.43:6579
+    pool:
+      max-active: 8
+      max-wait: 3000
+      max-idle: 8
+      min-idle: 0
+server:
+  port: 9527
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8088/eureka
+
+zuul:
+  ribbonIsolationStrategy: SEMAPHORE
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  #路由规则
+  routes:
+    route1:
+      path: /seckill-provider/**
+      serviceId: eureka-client
+  ribbon:
+    ReadTimeout: 60000
+    ConnectTimeout: 60000
+  hystrix:
+    command:
+      default:
+        execution:
+          isolation:
+            thread:
+              timeoutInMilliseconds: 60000
+
+

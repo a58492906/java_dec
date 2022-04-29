@@ -1,0 +1,90 @@
+server:
+  port: 8763 # 8763
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8088/eureka
+  instance:
+    prefer-ip-address: true
+    #注册中心展示的服务格式 此处的配置只是为了eureka控制台好看一些
+    instance-id: ${spring.application.name}:${server.port}
+redisson:
+  address: redis://127.0.0.1:6379
+spring:
+  application:
+    name: order-service
+  redis:
+    database: 0
+    port: 6379
+    password:
+    timeout: 3000
+    host: 127.0.0.1
+    #    cluster:
+    #      nodes: 192.168.234.18:6579,192.168.234.28:6579,192.168.234.29:6579,192.168.234.30:6579,192.168.234.6:6579,192.168.234.43:6579
+    pool:
+      max-active: 8
+      max-wait: 3000
+      max-idle: 8
+      min-idle: 0
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      #初始化大小
+      initialSize: 5
+      #最小值
+      minIdle: 5
+      #最大值
+      maxActive: 20
+      #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接
+      timeBetweenEvictionRunsMillis: 60000
+      #配置一个连接在池中最小生存的时间
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+      #'wall'用于防火墙，SpringBoot中没有log4j，我改成了log4j2
+      filters: stat,wall,log4j2
+      #最大PSCache连接
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  kafka:
+    bootstrap-servers:  127.0.0.1:9092
+    #=============== producer  =======================
+    producer:
+      #如果该值大于零时，表示启用重试失败的发送次数
+      retries: 0
+      #每当多个记录被发送到同一分区时，生产者将尝试将记录一起批量处理为更少的请求，默认值为16384(单位字节)
+      batch-size: 16384
+      #生产者可用于缓冲等待发送到服务器的记录的内存总字节数，默认值为3355443
+      buffer-memory: 33554432
+      #key的Serializer类，实现类实现了接口org.apache.kafka.common.serialization.Serializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      #value的Serializer类，实现类实现了接口org.apache.kafka.common.serialization.Serializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #=============== consumer  =======================
+    consumer:
+      #用于标识此使用者所属的使用者组的唯一字符串
+      group-id: test-consumer-group
+      #当Kafka中没有初始偏移量或者服务器上不再存在当前偏移量时该怎么办，默认值为latest，表示自动将偏移重置为最新的偏移量
+      #可选的值为latest, earliest, none
+      auto-offset-reset: earliest
+      #消费者的偏移量将在后台定期提交，默认值为true
+      enable-auto-commit: true
+      #如果'enable-auto-commit'为true，则消费者偏移自动提交给Kafka的频率（以毫秒为单位），默认值为5000。
+      auto-commit-interval: 100
+      #密钥的反序列化器类，实现类实现了接口org.apache.kafka.common.serialization.Deserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #值的反序列化器类，实现类实现了接口org.apache.kafka.common.serialization.Deserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
